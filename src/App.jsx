@@ -12,6 +12,7 @@ import { expressQuestions } from './data/expressQuestions';
 import { mongodbQuestions } from './data/mongodbQuestions';
 import { sqlQuestions } from './data/sqlQuestions';
 import { typescriptQuestions } from './data/typescriptQuestions';
+import { computerNetworksQuestions } from './data/computerNetworksQuestions';
 import QuizHeader from './components/QuizHeader';
 import QuizQuestion from './components/QuizQuestion';
 import QuizExplanation from './components/QuizExplanation';
@@ -62,6 +63,7 @@ function App() {
                        quizType === 'mongodb' ? mongodbQuestions :
                        quizType === 'sql' ? sqlQuestions :
                        quizType === 'typescript' ? typescriptQuestions :
+                       quizType === 'computernetworks' ? computerNetworksQuestions :
                        [];
 
   // Validate questions exist
@@ -241,6 +243,7 @@ function App() {
 
   const handleBackToMenu = () => {
     setQuizType(null);
+    setSelectedCategory(null);
     setCurrentQuestion(0);
     setSelectedAnswer(null);
     setShowExplanation(false);
@@ -251,74 +254,102 @@ function App() {
     setShuffledQuestions([]);
   };
 
-  if (quizType === null) {
+  const [selectedCategory, setSelectedCategory] = useState(null);
+
+  const categories = {
+    'programming': {
+      title: 'Programming Languages',
+      icon: faCode,
+      color: 'from-purple-600 to-indigo-600',
+      hoverColor: 'from-purple-700 hover:to-indigo-700',
+      quizzes: [
+        { id: 'java', name: 'Java', icon: faJava, color: 'from-red-600 to-orange-600', hoverColor: 'from-red-700 hover:to-orange-700' },
+        { id: 'js', name: 'JavaScript', icon: faJs, color: 'from-yellow-600 to-orange-600', hoverColor: 'from-yellow-700 hover:to-orange-700' },
+        { id: 'typescript', name: 'TypeScript', icon: faCode, color: 'from-blue-500 to-blue-700', hoverColor: 'from-blue-600 hover:to-blue-800' }
+      ]
+    },
+    'webdev': {
+      title: 'Web Development',
+      icon: faServer,
+      color: 'from-green-600 to-teal-600',
+      hoverColor: 'from-green-700 hover:to-teal-700',
+      quizzes: [
+        { id: 'react', name: 'React', icon: faReact, color: 'from-blue-600 to-cyan-600', hoverColor: 'from-blue-700 hover:to-cyan-700' },
+        { id: 'nextjs', name: 'Next.js', icon: null, color: 'from-gray-700 to-gray-900', hoverColor: 'from-gray-800 hover:to-black' },
+        { id: 'nodejs', name: 'Node.js', icon: faNode, color: 'from-green-600 to-green-800', hoverColor: 'from-green-700 hover:to-green-900' },
+        { id: 'express', name: 'Express', icon: faServer, color: 'from-blue-500 to-indigo-600', hoverColor: 'from-blue-600 hover:to-indigo-700' },
+        { id: 'mongodb', name: 'MongoDB', icon: faDatabase, color: 'from-green-500 to-teal-600', hoverColor: 'from-green-600 hover:to-teal-700' },
+        { id: 'sql', name: 'SQL', icon: faDatabase, color: 'from-orange-500 to-red-600', hoverColor: 'from-orange-600 hover:to-red-700' },
+        { id: 'computernetworks', name: 'Computer Networks', icon: faServer, color: 'from-cyan-500 to-blue-600', hoverColor: 'from-cyan-600 hover:to-blue-700' }
+      ]
+    }
+  };
+
+  const handleCategorySelect = (category) => {
+    setSelectedCategory(category);
+  };
+
+  const handleBackToCategories = () => {
+    setSelectedCategory(null);
+  };
+
+  if (quizType === null && selectedCategory === null) {
     return (
       <div className="min-h-screen bg-linear-to-br from-gray-900 to-black py-8 px-4">
         <div className="max-w-2xl mx-auto text-center">
-          <h1 className="text-4xl font-bold text-white mb-8">Choose Your Quiz! 🎯</h1>
-          <div className="grid grid-cols-2 gap-4 mb-8">
+          <h1 className="text-4xl font-bold text-white mb-4">Choose Your Quiz Category! 🎯</h1>
+          <p className="text-gray-400 mb-8">Select a category to explore available quizzes</p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            {Object.entries(categories).map(([key, category]) => (
+              <button
+                key={key}
+                onClick={() => handleCategorySelect(key)}
+                className={`bg-linear-to-r ${category.color} text-white px-8 py-6 rounded-lg font-semibold hover:${category.hoverColor} transition-all transform hover:scale-105 shadow-lg`}
+              >
+                <FontAwesomeIcon icon={category.icon} className="text-3xl mb-3" />
+                <div className="text-xl">{category.title}</div>
+                <div className="text-sm opacity-75 mt-2">{category.quizzes.length} quizzes available</div>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (quizType === null && selectedCategory !== null) {
+    const category = categories[selectedCategory];
+    
+    return (
+      <div className="min-h-screen bg-linear-to-br from-gray-900 to-black py-8 px-4">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-8">
             <button
-              onClick={() => handleQuizSelect('java')}
-              className="bg-linear-to-r from-purple-600 to-pink-600 text-white px-6 py-4 rounded-lg font-semibold hover:from-purple-700 hover:to-pink-700 transition-all transform hover:scale-105"
+              onClick={handleBackToCategories}
+              className="text-gray-400 hover:text-white mb-4 transition-colors"
             >
-              <FontAwesomeIcon icon={faJava} className="mr-2" />
-              Java
+              ← Back to Categories
             </button>
-            <button
-              onClick={() => handleQuizSelect('js')}
-              className="bg-linear-to-r from-yellow-600 to-orange-600 text-white px-6 py-4 rounded-lg font-semibold hover:from-yellow-700 hover:to-orange-700 transition-all transform hover:scale-105"
-            >
-              <FontAwesomeIcon icon={faJs} className="mr-2" />
-              JavaScript
-            </button>
-            <button
-              onClick={() => handleQuizSelect('react')}
-              className="bg-linear-to-r from-blue-600 to-cyan-600 text-white px-6 py-4 rounded-lg font-semibold hover:from-blue-700 hover:to-cyan-700 transition-all transform hover:scale-105"
-            >
-              <FontAwesomeIcon icon={faReact} className="mr-2" />
-              React
-            </button>
-            <button
-              onClick={() => handleQuizSelect('nextjs')}
-              className="bg-linear-to-r from-gray-700 to-gray-900 text-white px-6 py-4 rounded-lg font-semibold hover:from-gray-800 hover:to-black transition-all transform hover:scale-105"
-            >
-              ▲ Next.js
-            </button>
-            <button
-              onClick={() => handleQuizSelect('nodejs')}
-              className="bg-linear-to-r from-green-600 to-green-800 text-white px-6 py-4 rounded-lg font-semibold hover:from-green-700 hover:to-green-900 transition-all transform hover:scale-105"
-            >
-              <FontAwesomeIcon icon={faNode} className="mr-2" />
-              Node.js
-            </button>
-            <button
-              onClick={() => handleQuizSelect('express')}
-              className="bg-linear-to-r from-blue-500 to-indigo-600 text-white px-6 py-4 rounded-lg font-semibold hover:from-blue-600 hover:to-indigo-700 transition-all transform hover:scale-105"
-            >
-              <FontAwesomeIcon icon={faServer} className="mr-2" />
-              Express
-            </button>
-            <button
-              onClick={() => handleQuizSelect('mongodb')}
-              className="bg-linear-to-r from-green-500 to-teal-600 text-white px-6 py-4 rounded-lg font-semibold hover:from-green-600 hover:to-teal-700 transition-all transform hover:scale-105"
-            >
-              <FontAwesomeIcon icon={faDatabase} className="mr-2" />
-              MongoDB
-            </button>
-            <button
-              onClick={() => handleQuizSelect('sql')}
-              className="bg-linear-to-r from-orange-500 to-red-600 text-white px-6 py-4 rounded-lg font-semibold hover:from-orange-600 hover:to-red-700 transition-all transform hover:scale-105"
-            >
-              <FontAwesomeIcon icon={faDatabase} className="mr-2" />
-              SQL
-            </button>
-            <button
-              onClick={() => handleQuizSelect('typescript')}
-              className="bg-linear-to-r from-blue-500 to-blue-700 text-white px-6 py-4 rounded-lg font-semibold hover:from-blue-600 hover:to-blue-800 transition-all transform hover:scale-105"
-            >
-              <FontAwesomeIcon icon={faCode} className="mr-2" />
-              TypeScript
-            </button>
+            <h1 className="text-3xl font-bold text-white mb-2">
+              <FontAwesomeIcon icon={category.icon} className="mr-3" />
+              {category.title}
+            </h1>
+            <p className="text-gray-400">Choose a technology to test your knowledge</p>
+          </div>
+          
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {category.quizzes.map((quiz) => (
+              <button
+                key={quiz.id}
+                onClick={() => handleQuizSelect(quiz.id)}
+                className={`bg-linear-to-r ${quiz.color} text-white px-6 py-4 rounded-lg font-semibold hover:${quiz.hoverColor} transition-all transform hover:scale-105 shadow-lg`}
+              >
+                {quiz.icon && <FontAwesomeIcon icon={quiz.icon} className="mr-2" />}
+                {!quiz.icon && quiz.id === 'nextjs' && <span className="mr-2">▲</span>}
+                {quiz.name}
+              </button>
+            ))}
           </div>
         </div>
       </div>
@@ -334,7 +365,9 @@ function App() {
                     quizType === 'nodejs' ? 'Node.js Backend' :
                     quizType === 'express' ? 'Express.js API' :
                     quizType === 'mongodb' ? 'MongoDB Database' :
+                    quizType === 'sql' ? 'SQL Database' :
                     quizType === 'typescript' ? 'TypeScript Expert' :
+                    quizType === 'computernetworks' ? 'Computer Networks Fundamentals' :
                     'SQL Database';
 
     const totalQuestions = baseQuestions.length;
