@@ -8,6 +8,7 @@ const QuizHeader = ({ currentQuestion, totalQuestions, score, quizType, onBackTo
                quizType === 'nodejs' ? '🟢 Node.js Backend Quiz' :
                quizType === 'express' ? '🚀 Express.js API Quiz' :
                quizType === 'mongodb' ? '🍃 MongoDB Database Quiz' :
+               quizType === 'typescript' ? '📘 TypeScript Expert Quiz' :
                '🗄️ SQL Database Quiz';
   const subtitle = quizType === 'java' ? 'Test your Java knowledge with simple explanations!' :
                   quizType === 'js' ? 'Test your JavaScript knowledge with weird behaviors!' :
@@ -16,6 +17,7 @@ const QuizHeader = ({ currentQuestion, totalQuestions, score, quizType, onBackTo
                   quizType === 'nodejs' ? 'Master Node.js backend development!' :
                   quizType === 'express' ? 'Master Express.js API development!' :
                   quizType === 'mongodb' ? 'Master MongoDB NoSQL database!' :
+                  quizType === 'typescript' ? 'Master TypeScript type system and advanced features!' :
                   'Master SQL relational database!';
 
   const formatTime = (seconds) => {
@@ -48,7 +50,7 @@ const QuizHeader = ({ currentQuestion, totalQuestions, score, quizType, onBackTo
           }`}>
             {quizMode === 'study' ? '📚 Study Mode' : '📝 Quiz Mode'}
           </span>
-          {isTimed && (
+          {isTimed && quizMode === 'quiz' && (
             <span className={`px-3 py-1 rounded-full font-semibold ${
               timeLeft < 60 ? 'bg-red-600 text-white animate-pulse' : 'bg-green-600 text-white'
             }`}>
@@ -62,11 +64,11 @@ const QuizHeader = ({ currentQuestion, totalQuestions, score, quizType, onBackTo
       <div className="mb-6">
         <div className="flex justify-between text-sm text-gray-400 mb-2">
           <span>Question {currentQuestion + 1} of {totalQuestions}</span>
-          <span>Score: {score}</span>
+          {quizMode === 'quiz' && <span>Score: {score}</span>}
         </div>
         <div className="w-full bg-gray-700 rounded-full h-3">
           <div
-            className="bg-gradient-to-r from-purple-600 to-pink-600 h-3 rounded-full transition-all duration-300"
+            className="bg-linear-to-r from-purple-600 to-pink-600 h-3 rounded-full transition-all duration-300"
             style={{ width: `${((currentQuestion + 1) / totalQuestions) * 100}%` }}
           ></div>
         </div>

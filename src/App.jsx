@@ -8,10 +8,12 @@ import { nodejsQuestions } from './data/nodejsQuestions';
 import { expressQuestions } from './data/expressQuestions';
 import { mongodbQuestions } from './data/mongodbQuestions';
 import { sqlQuestions } from './data/sqlQuestions';
+import { typescriptQuestions } from './data/typescriptQuestions';
 import QuizHeader from './components/QuizHeader';
 import QuizQuestion from './components/QuizQuestion';
 import QuizExplanation from './components/QuizExplanation';
 import QuizResults from './components/QuizResults';
+import QuizReview from './components/QuizReview';
 
 function App() {
   const [quizType, setQuizType] = useState(null);
@@ -24,6 +26,7 @@ function App() {
   const [showExplanation, setShowExplanation] = useState(false);
   const [score, setScore] = useState(0);
   const [quizCompleted, setQuizCompleted] = useState(false);
+  const [showReview, setShowReview] = useState(false);
   const [answers, setAnswers] = useState([]);
   const [shuffledQuestions, setShuffledQuestions] = useState([]);
 
@@ -54,23 +57,67 @@ function App() {
                        quizType === 'nodejs' ? nodejsQuestions :
                        quizType === 'express' ? expressQuestions :
                        quizType === 'mongodb' ? mongodbQuestions :
-                       sqlQuestions;
+                       quizType === 'sql' ? sqlQuestions :
+                       quizType === 'typescript' ? typescriptQuestions :
+                       [];
+
+  // Validate questions exist
+  if (quizType && (!baseQuestions || baseQuestions.length === 0)) {
+    return (
+      <div className="min-h-screen bg-linear-to-br from-gray-900 to-black py-8 px-4 flex items-center justify-center">
+        <div className="bg-gray-800 border border-gray-700 rounded-2xl shadow-2xl p-8 text-center max-w-md">
+          <div className="text-6xl mb-4">⚠️</div>
+          <h2 className="text-2xl font-bold text-white mb-4">No Questions Available</h2>
+          <p className="text-gray-400 mb-6">This quiz doesn't have any questions yet.</p>
+          <button
+            onClick={handleBackToMenu}
+            className="bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold transition-all"
+          >
+            ← Back to Menu
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   const currentQuestions = shuffledQuestions.length > 0 ? shuffledQuestions : getQuestionsByDifficulty(baseQuestions);
 
   // Timer effect
   useEffect(() => {
     let interval;
-    if (isTimed && timeLeft > 0 && !quizCompleted) {
+    if (isTimed && timeLeft > 0 && !quizCompleted && quizMode === 'quiz') {
       interval = setInterval(() => {
         setTimeLeft((prevTime) => {
           if (prevTime <= 1) {
-            // Time's up - auto-submit current answer or move to next
+            // Time's up - auto-submit or move to next
             if (selectedAnswer !== null && !showExplanation) {
-              handleSubmitAnswer();
+              // Submit current answer
+              setShowExplanation(true);
+              const isCorrect = selectedAnswer === currentQuestions[currentQuestion].correctAnswer;
+              if (isCorrect) {
+                setScore(prev => prev + 1);
+              }
+              const newAnswers = [
+                ...answers,
+                {
+                  questionIndex: currentQuestion,
+                  selectedAnswer,
+                  isCorrect,
+                  question: currentQuestions[currentQuestion].question,
+                  options: currentQuestions[currentQuestion].options,
+                  correctAnswer: currentQuestions[currentQuestion].correctAnswer,
+                  explanation: currentQuestions[currentQuestion].explanation
+                }
+              ];
+              setAnswers(newAnswers);
             } else if (currentQuestion < currentQuestions.length - 1) {
-              handleNextQuestion();
+              // Move to next question
+              setCurrentQuestion(prev => prev + 1);
+              setSelectedAnswer(null);
+              setShowExplanation(false);
             } else {
+              // Complete quiz
+              setShowReview(true);
               setQuizCompleted(true);
             }
             return 0;
@@ -80,14 +127,40 @@ function App() {
       }, 1000);
     }
     return () => clearInterval(interval);
-  }, [isTimed, timeLeft, quizCompleted, selectedAnswer, showExplanation, currentQuestion]);
+  }, [isTimed, timeLeft, quizCompleted, selectedAnswer, showExplanation, currentQuestion, quizMode, currentQuestions, answers]);
 
   const handleAnswerSelect = (answerIndex) => {
     if (quizMode === 'study' || !showExplanation) {
       setSelectedAnswer(answerIndex);
       if (quizMode === 'study') {
-        // In study mode, show explanation immediately
+        // In study mode, show explanation immediately and track answer
         setShowExplanation(true);
+        const isCorrect = answerIndex === currentQuestions[currentQuestion].correctAnswer;
+        
+        // Check if answer for this question already exists
+        const existingAnswerIndex = answers.findIndex(a => a.questionIndex === currentQuestion);
+        
+        const newAnswer = {
+          questionIndex: currentQuestion,
+          selectedAnswer: answerIndex,
+          isCorrect,
+          question: currentQuestions[currentQuestion].question,
+          options: currentQuestions[currentQuestion].options,
+          correctAnswer: currentQuestions[currentQuestion].correctAnswer,
+          explanation: currentQuestions[currentQuestion].explanation
+        };
+        
+        let newAnswers;
+        if (existingAnswerIndex !== -1) {
+          // Update existing answer
+          newAnswers = [...answers];
+          newAnswers[existingAnswerIndex] = newAnswer;
+        } else {
+          // Add new answer
+          newAnswers = [...answers, newAnswer];
+        }
+        
+        setAnswers(newAnswers);
       }
     }
   };
@@ -106,6 +179,9 @@ function App() {
           questionIndex: currentQuestion,
           selectedAnswer,
           isCorrect,
+          question: currentQuestions[currentQuestion].question,
+          options: currentQuestions[currentQuestion].options,
+          correctAnswer: currentQuestions[currentQuestion].correctAnswer,
           explanation: currentQuestions[currentQuestion].explanation
         }
       ];
@@ -117,8 +193,10 @@ function App() {
     if (currentQuestion < currentQuestions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
       setSelectedAnswer(null);
-      setShowExplanation(quizMode === 'study'); // Keep explanations visible in study mode
+      setShowExplanation(false); // Always hide explanation when moving to next question
     } else {
+      // Show review screen before final results
+      setShowReview(true);
       setQuizCompleted(true);
     }
   };
@@ -129,7 +207,9 @@ function App() {
     setShowExplanation(false);
     setScore(0);
     setQuizCompleted(false);
+    setShowReview(false);
     setAnswers([]);
+    setShuffledQuestions([]);
   };
 
   const handleQuizSelect = (type) => {
@@ -141,9 +221,11 @@ function App() {
     const shuffled = shuffleArray(questions);
     setShuffledQuestions(shuffled);
 
-    // Set timer if timed mode
-    if (isTimed) {
-      setTimeLeft(shuffled.length * 30); // 30 seconds per question
+    // Set timer if timed mode (not available in study mode)
+    if (isTimed && quizMode !== 'study') {
+      setTimeLeft(shuffled.length * 60); // 60 seconds per question
+    } else {
+      setTimeLeft(0);
     }
 
     setCurrentQuestion(0);
@@ -161,62 +243,70 @@ function App() {
     setShowExplanation(false);
     setScore(0);
     setQuizCompleted(false);
+    setShowReview(false);
     setAnswers([]);
+    setShuffledQuestions([]);
   };
 
   if (quizType === null) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black py-8 px-4">
+      <div className="min-h-screen bg-linear-to-br from-gray-900 to-black py-8 px-4">
         <div className="max-w-2xl mx-auto text-center">
           <h1 className="text-4xl font-bold text-white mb-8">Choose Your Quiz! 🎯</h1>
           <div className="grid grid-cols-2 gap-4 mb-8">
             <button
               onClick={() => handleQuizSelect('java')}
-              className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-4 rounded-lg font-semibold hover:from-purple-700 hover:to-pink-700 transition-all transform hover:scale-105"
+              className="bg-linear-to-r from-purple-600 to-pink-600 text-white px-6 py-4 rounded-lg font-semibold hover:from-purple-700 hover:to-pink-700 transition-all transform hover:scale-105"
             >
               ☕ Java
             </button>
             <button
               onClick={() => handleQuizSelect('js')}
-              className="bg-gradient-to-r from-yellow-600 to-orange-600 text-white px-6 py-4 rounded-lg font-semibold hover:from-yellow-700 hover:to-orange-700 transition-all transform hover:scale-105"
+              className="bg-linear-to-r from-yellow-600 to-orange-600 text-white px-6 py-4 rounded-lg font-semibold hover:from-yellow-700 hover:to-orange-700 transition-all transform hover:scale-105"
             >
               🟨 JavaScript
             </button>
             <button
               onClick={() => handleQuizSelect('react')}
-              className="bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-6 py-4 rounded-lg font-semibold hover:from-blue-700 hover:to-cyan-700 transition-all transform hover:scale-105"
+              className="bg-linear-to-r from-blue-600 to-cyan-600 text-white px-6 py-4 rounded-lg font-semibold hover:from-blue-700 hover:to-cyan-700 transition-all transform hover:scale-105"
             >
               ⚛️ React
             </button>
             <button
               onClick={() => handleQuizSelect('nextjs')}
-              className="bg-gradient-to-r from-gray-700 to-gray-900 text-white px-6 py-4 rounded-lg font-semibold hover:from-gray-800 hover:to-black transition-all transform hover:scale-105"
+              className="bg-linear-to-r from-gray-700 to-gray-900 text-white px-6 py-4 rounded-lg font-semibold hover:from-gray-800 hover:to-black transition-all transform hover:scale-105"
             >
               ▲ Next.js
             </button>
             <button
               onClick={() => handleQuizSelect('nodejs')}
-              className="bg-gradient-to-r from-green-600 to-green-800 text-white px-6 py-4 rounded-lg font-semibold hover:from-green-700 hover:to-green-900 transition-all transform hover:scale-105"
+              className="bg-linear-to-r from-green-600 to-green-800 text-white px-6 py-4 rounded-lg font-semibold hover:from-green-700 hover:to-green-900 transition-all transform hover:scale-105"
             >
               🟢 Node.js
             </button>
             <button
               onClick={() => handleQuizSelect('express')}
-              className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-6 py-4 rounded-lg font-semibold hover:from-blue-600 hover:to-indigo-700 transition-all transform hover:scale-105"
+              className="bg-linear-to-r from-blue-500 to-indigo-600 text-white px-6 py-4 rounded-lg font-semibold hover:from-blue-600 hover:to-indigo-700 transition-all transform hover:scale-105"
             >
               🚀 Express
             </button>
             <button
               onClick={() => handleQuizSelect('mongodb')}
-              className="bg-gradient-to-r from-green-500 to-teal-600 text-white px-6 py-4 rounded-lg font-semibold hover:from-green-600 hover:to-teal-700 transition-all transform hover:scale-105"
+              className="bg-linear-to-r from-green-500 to-teal-600 text-white px-6 py-4 rounded-lg font-semibold hover:from-green-600 hover:to-teal-700 transition-all transform hover:scale-105"
             >
               🍃 MongoDB
             </button>
             <button
               onClick={() => handleQuizSelect('sql')}
-              className="bg-gradient-to-r from-orange-500 to-red-600 text-white px-6 py-4 rounded-lg font-semibold hover:from-orange-600 hover:to-red-700 transition-all transform hover:scale-105"
+              className="bg-linear-to-r from-orange-500 to-red-600 text-white px-6 py-4 rounded-lg font-semibold hover:from-orange-600 hover:to-red-700 transition-all transform hover:scale-105"
             >
               🗄️ SQL
+            </button>
+            <button
+              onClick={() => handleQuizSelect('typescript')}
+              className="bg-linear-to-r from-blue-500 to-blue-700 text-white px-6 py-4 rounded-lg font-semibold hover:from-blue-600 hover:to-blue-800 transition-all transform hover:scale-105"
+            >
+              📘 TypeScript
             </button>
           </div>
         </div>
@@ -233,15 +323,21 @@ function App() {
                     quizType === 'nodejs' ? 'Node.js Backend' :
                     quizType === 'express' ? 'Express.js API' :
                     quizType === 'mongodb' ? 'MongoDB Database' :
+                    quizType === 'typescript' ? 'TypeScript Expert' :
                     'SQL Database';
 
+    const totalQuestions = baseQuestions.length;
+    const easyQuestions = Math.ceil(baseQuestions.length * 0.4);
+    const mediumQuestions = Math.ceil(baseQuestions.length * 0.7);
+    const hardQuestions = baseQuestions.length;
+
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black py-8 px-4">
+      <div className="min-h-screen bg-linear-to-br from-gray-900 to-black py-8 px-4">
         <div className="max-w-2xl mx-auto">
           <div className="bg-gray-800 border border-gray-700 rounded-2xl shadow-2xl p-8">
             <div className="text-center mb-8">
               <h1 className="text-3xl font-bold text-white mb-2">{quizName} Quiz</h1>
-              <p className="text-gray-400">Configure your quiz experience</p>
+              <p className="text-gray-400">Total Questions: {totalQuestions} | Configure your quiz experience</p>
             </div>
 
             {/* Difficulty Selection */}
@@ -256,7 +352,8 @@ function App() {
                       : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                   }`}
                 >
-                  🟢 Easy
+                  🟢 Easy<br />
+                  <span className="text-xs">{easyQuestions} questions</span>
                 </button>
                 <button
                   onClick={() => setDifficulty('medium')}
@@ -266,7 +363,8 @@ function App() {
                       : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                   }`}
                 >
-                  🟡 Medium
+                  🟡 Medium<br />
+                  <span className="text-xs">{mediumQuestions} questions</span>
                 </button>
                 <button
                   onClick={() => setDifficulty('hard')}
@@ -276,7 +374,8 @@ function App() {
                       : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                   }`}
                 >
-                  🔴 Hard
+                  🔴 Hard<br />
+                  <span className="text-xs">{hardQuestions} questions</span>
                 </button>
               </div>
             </div>
@@ -293,7 +392,8 @@ function App() {
                       : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                   }`}
                 >
-                  📝 Quiz Mode
+                  📝 Quiz Mode<br />
+                  <span className="text-xs">Test knowledge with scoring</span>
                 </button>
                 <button
                   onClick={() => setQuizMode('study')}
@@ -303,7 +403,8 @@ function App() {
                       : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                   }`}
                 >
-                  📚 Study Mode
+                  📚 Study Mode<br />
+                  <span className="text-xs">Learn with explanations</span>
                 </button>
               </div>
             </div>
@@ -315,9 +416,13 @@ function App() {
                   type="checkbox"
                   checked={isTimed}
                   onChange={(e) => setIsTimed(e.target.checked)}
-                  className="mr-3 w-4 h-4"
+                  disabled={quizMode === 'study'}
+                  className="mr-3 w-4 h-4 disabled:opacity-50 disabled:cursor-not-allowed"
                 />
-                <span className="text-white font-semibold">Enable Timer (30s per question)</span>
+                <span className={`text-white font-semibold ${quizMode === 'study' ? 'opacity-50' : ''}`}>
+                  Enable Timer (1 minute per question)
+                  {quizMode === 'study' && <span className="text-sm text-gray-400 ml-2">(Not available in Study Mode)</span>}
+                </span>
               </label>
             </div>
 
@@ -331,7 +436,7 @@ function App() {
               </button>
               <button
                 onClick={handleStartQuiz}
-                className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-purple-700 hover:to-pink-700 transition-all transform hover:scale-105"
+                className="flex-1 bg-linear-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-purple-700 hover:to-pink-700 transition-all transform hover:scale-105"
               >
                 Start Quiz 🚀
               </button>
@@ -342,12 +447,24 @@ function App() {
     );
   }
 
+  // Show review screen before final results
+  if (quizCompleted && showReview) {
+    return (
+      <QuizReview
+        answers={answers}
+        quizMode={quizMode}
+        onContinue={() => setShowReview(false)}
+        onBackToMenu={handleBackToMenu}
+      />
+    );
+  }
+
   if (quizCompleted) {
-    return <QuizResults score={score} totalQuestions={currentQuestions.length} onRestart={handleRestartQuiz} onBackToMenu={handleBackToMenu} />;
+    return <QuizResults score={score} totalQuestions={currentQuestions.length} onRestart={handleRestartQuiz} onBackToMenu={handleBackToMenu} quizType={quizType} />;
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black py-8 px-4">
+    <div className="min-h-screen bg-linear-to-br from-gray-900 to-black py-8 px-4">
       <div className="max-w-3xl mx-auto">
         <QuizHeader
           currentQuestion={currentQuestion}
@@ -381,7 +498,7 @@ function App() {
             <button
               onClick={handleNextQuestion}
               disabled={selectedAnswer === null}
-              className="bg-gradient-to-r from-green-600 to-emerald-600 text-white px-6 py-2 rounded-lg font-semibold hover:from-green-700 hover:to-emerald-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-linear-to-r from-green-600 to-emerald-600 text-white px-6 py-2 rounded-lg font-semibold hover:from-green-700 hover:to-emerald-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {currentQuestion < currentQuestions.length - 1 ? 'Next Question' : 'See Results'}
             </button>
@@ -390,14 +507,14 @@ function App() {
               <button
                 onClick={handleSubmitAnswer}
                 disabled={selectedAnswer === null}
-                className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-2 rounded-lg font-semibold hover:from-purple-700 hover:to-pink-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="bg-linear-to-r from-purple-600 to-pink-600 text-white px-6 py-2 rounded-lg font-semibold hover:from-purple-700 hover:to-pink-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Submit Answer
               </button>
             ) : (
               <button
                 onClick={handleNextQuestion}
-                className="bg-gradient-to-r from-green-600 to-emerald-600 text-white px-6 py-2 rounded-lg font-semibold hover:from-green-700 hover:to-emerald-700 transition-all"
+                className="bg-linear-to-r from-green-600 to-emerald-600 text-white px-6 py-2 rounded-lg font-semibold hover:from-green-700 hover:to-emerald-700 transition-all"
               >
                 {currentQuestion < currentQuestions.length - 1 ? 'Next Question' : 'See Results'}
               </button>
