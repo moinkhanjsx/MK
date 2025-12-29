@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faJava, faJs, faReact, faNode } from '@fortawesome/free-brands-svg-icons';
+import { faDatabase, faServer, faCode } from '@fortawesome/free-solid-svg-icons';
 import { quizQuestions } from './data/quizQuestions';
 import { jsQuestions } from './data/jsQuestions';
 import { reactQuestions } from './data/reactQuestions';
@@ -258,19 +261,22 @@ function App() {
               onClick={() => handleQuizSelect('java')}
               className="bg-linear-to-r from-purple-600 to-pink-600 text-white px-6 py-4 rounded-lg font-semibold hover:from-purple-700 hover:to-pink-700 transition-all transform hover:scale-105"
             >
-              ☕ Java
+              <FontAwesomeIcon icon={faJava} className="mr-2" />
+              Java
             </button>
             <button
               onClick={() => handleQuizSelect('js')}
               className="bg-linear-to-r from-yellow-600 to-orange-600 text-white px-6 py-4 rounded-lg font-semibold hover:from-yellow-700 hover:to-orange-700 transition-all transform hover:scale-105"
             >
-              🟨 JavaScript
+              <FontAwesomeIcon icon={faJs} className="mr-2" />
+              JavaScript
             </button>
             <button
               onClick={() => handleQuizSelect('react')}
               className="bg-linear-to-r from-blue-600 to-cyan-600 text-white px-6 py-4 rounded-lg font-semibold hover:from-blue-700 hover:to-cyan-700 transition-all transform hover:scale-105"
             >
-              ⚛️ React
+              <FontAwesomeIcon icon={faReact} className="mr-2" />
+              React
             </button>
             <button
               onClick={() => handleQuizSelect('nextjs')}
@@ -282,31 +288,36 @@ function App() {
               onClick={() => handleQuizSelect('nodejs')}
               className="bg-linear-to-r from-green-600 to-green-800 text-white px-6 py-4 rounded-lg font-semibold hover:from-green-700 hover:to-green-900 transition-all transform hover:scale-105"
             >
-              🟢 Node.js
+              <FontAwesomeIcon icon={faNode} className="mr-2" />
+              Node.js
             </button>
             <button
               onClick={() => handleQuizSelect('express')}
               className="bg-linear-to-r from-blue-500 to-indigo-600 text-white px-6 py-4 rounded-lg font-semibold hover:from-blue-600 hover:to-indigo-700 transition-all transform hover:scale-105"
             >
-              🚀 Express
+              <FontAwesomeIcon icon={faServer} className="mr-2" />
+              Express
             </button>
             <button
               onClick={() => handleQuizSelect('mongodb')}
               className="bg-linear-to-r from-green-500 to-teal-600 text-white px-6 py-4 rounded-lg font-semibold hover:from-green-600 hover:to-teal-700 transition-all transform hover:scale-105"
             >
-              🍃 MongoDB
+              <FontAwesomeIcon icon={faDatabase} className="mr-2" />
+              MongoDB
             </button>
             <button
               onClick={() => handleQuizSelect('sql')}
               className="bg-linear-to-r from-orange-500 to-red-600 text-white px-6 py-4 rounded-lg font-semibold hover:from-orange-600 hover:to-red-700 transition-all transform hover:scale-105"
             >
-              🗄️ SQL
+              <FontAwesomeIcon icon={faDatabase} className="mr-2" />
+              SQL
             </button>
             <button
               onClick={() => handleQuizSelect('typescript')}
               className="bg-linear-to-r from-blue-500 to-blue-700 text-white px-6 py-4 rounded-lg font-semibold hover:from-blue-600 hover:to-blue-800 transition-all transform hover:scale-105"
             >
-              📘 TypeScript
+              <FontAwesomeIcon icon={faCode} className="mr-2" />
+              TypeScript
             </button>
           </div>
         </div>
