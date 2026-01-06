@@ -246,8 +246,6 @@ function App() {
     setShuffledQuestions([]);
   };
 
-  const [selectedCategory, setSelectedCategory] = useState(null);
-
   const categories = {
     'programming': {
       title: 'Programming Languages',
