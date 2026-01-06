@@ -2,7 +2,7 @@
 // Instead of: quizType === 'java' ? quizQuestions : quizType === 'js' ? jsQuestions : ...
 // Use: QUIZ_QUESTIONS_MAP[quizType]
 
-import { quizQuestions } from '../data/quizQuestions';
+import { javaQuestions } from '../data/questions/javaQuestions';
 import { jsQuestions } from '../data/jsQuestions';
 import { reactQuestions } from '../data/reactQuestions';
 import { nextjsQuestions } from '../data/nextjsQuestions';
@@ -26,7 +26,7 @@ import { modernHistoryQuestions } from '../data/modernHistoryQuestions';
  */
 export const QUIZ_QUESTIONS_MAP = {
   // Programming Languages
-  java: quizQuestions,
+  java: javaQuestions,
   js: jsQuestions,
   typescript: typescriptQuestions,
 
