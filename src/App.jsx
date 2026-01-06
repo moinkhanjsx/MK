@@ -3,19 +3,12 @@ import './App.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faJava, faJs, faReact, faNode } from '@fortawesome/free-brands-svg-icons';
 import { faDatabase, faServer, faCode } from '@fortawesome/free-solid-svg-icons';
-import { quizQuestions } from './data/quizQuestions';
-import { jsQuestions } from './data/jsQuestions';
-import { reactQuestions } from './data/reactQuestions';
-import { nextjsQuestions } from './data/nextjsQuestions';
-import { nodejsQuestions } from './data/nodejsQuestions';
-import { expressQuestions } from './data/expressQuestions';
-import { mongodbQuestions } from './data/mongodbQuestions';
-import { sqlQuestions } from './data/sqlQuestions';
-import { typescriptQuestions } from './data/typescriptQuestions';
-import { computerNetworksQuestions } from './data/computerNetworksQuestions';
-import { ancientHistoryQuestions } from './data/ancientHistoryQuestions';
-import { medievalHistoryQuestions } from './data/medievalHistoryQuestions';
-import { modernHistoryQuestions } from './data/modernHistoryQuestions';
+
+// Import new utilities and hooks
+import { QUIZ_QUESTIONS_MAP, getQuestionsByType } from './utils/quizMaps';
+import { NOTES_COMPONENTS_MAP, getNotesComponent } from './utils/notesMaps';
+import { useNotesNavigation, useQuizState, useCategoryNavigation } from './hooks/useNotesNavigation';
+import ErrorBoundary from './components/ErrorBoundary';
 import QuizHeader from './components/QuizHeader';
 import QuizQuestion from './components/QuizQuestion';
 import QuizExplanation from './components/QuizExplanation';
@@ -24,23 +17,6 @@ import QuizReview from './components/QuizReview';
 import CategorySelection from './components/CategorySelection';
 import QuizConfiguration from './components/QuizConfiguration';
 import QuizList from './components/QuizList';
-import SlaveHistoryNotes from './components/SlaveHistoryNotes';
-import KhiljiHistoryNotes from './components/KhiljiHistoryNotes';
-import TughlaqHistoryNotes from './components/TughlaqHistoryNotes';
-import SayyidLodistoryNotes from './components/SayyidLodistoryNotes';
-import DelhiSultanateAdminNotes from './components/DelhiSultanateAdminNotes';
-import DelhiSocietyEconomyCultureNotes from './components/DelhiSocietyEconomyCultureNotes';
-import TripartiteStruggleNotes from './components/TripartiteStruggleNotes';
-import TurkishInvasionsNotes from './components/TurkishInvasionsNotes';
-import EarlyMedievalSocietyEconomyCultureNotes from './components/EarlyMedievalSocietyEconomyCultureNotes';
-import MughalFoundersNotes from './components/MughalFoundersNotes';
-import SherShahSuriNotes from './components/SherShahSuriNotes';
-import AkbarNotes from './components/AkbarNotes';
-import JahangirShahJahanNotes from './components/JahangirShahJahanNotes';
-import AurangzebNotes from './components/AurangzebNotes';
-import MughalAdministrationNotes from './components/MughalAdministrationNotes';
-import MughalSocietyEconomyCultureNotes from './components/MughalSocietyEconomyCultureNotes';
-import MarathaEmpireNotes from './components/MarathaEmpireNotes';
 
 function App() {
   const [quizType, setQuizType] = useState(null);
@@ -56,23 +32,9 @@ function App() {
   const [showReview, setShowReview] = useState(false);
   const [answers, setAnswers] = useState([]);
   const [shuffledQuestions, setShuffledQuestions] = useState([]);
-  const [showNotes, setShowNotes] = useState(false);
-  const [showKhiljiNotes, setShowKhiljiNotes] = useState(false);
-  const [showTughlaqNotes, setShowTughlaqNotes] = useState(false);
-  const [showSayyidLodisNotes, setShowSayyidLodisNotes] = useState(false);
-  const [showAdminNotes, setShowAdminNotes] = useState(false);
-  const [showSocietyEconomyCultureNotes, setShowSocietyEconomyCultureNotes] = useState(false);
-  const [showTripartiteStruggleNotes, setShowTripartiteStruggleNotes] = useState(false);
-  const [showTurkishInvasionsNotes, setShowTurkishInvasionsNotes] = useState(false);
-  const [showEarlyMedievalSocietyNotes, setShowEarlyMedievalSocietyNotes] = useState(false);
-  const [showMughalFoundersNotes, setShowMughalFoundersNotes] = useState(false);
-  const [showSherShahSuriNotes, setShowSherShahSuriNotes] = useState(false);
-  const [showAkbarNotes, setShowAkbarNotes] = useState(false);
-  const [showJahangirShahJahanNotes, setShowJahangirShahJahanNotes] = useState(false);
-  const [showAurangzebNotes, setShowAurangzebNotes] = useState(false);
-  const [showMughalAdministrationNotes, setShowMughalAdministrationNotes] = useState(false);
-  const [showMughalSocietyEconomyCultureNotes, setShowMughalSocietyEconomyCultureNotes] = useState(false);
-  const [showMarathaEmpireNotes, setShowMarathaEmpireNotes] = useState(false);
+  // Use custom hooks for better state management
+  const { openNotes, openNotesByType, closeNotes } = useNotesNavigation();
+  const { selectedCategory, selectCategory, backToCategories } = useCategoryNavigation();
 
   // Shuffle array utility
   const shuffleArray = (array) => {
@@ -94,20 +56,7 @@ function App() {
     return questions; // Hard = all questions
   };
 
-  const baseQuestions = quizType === 'java' ? quizQuestions :
-                       quizType === 'js' ? jsQuestions :
-                       quizType === 'react' ? reactQuestions :
-                       quizType === 'nextjs' ? nextjsQuestions :
-                       quizType === 'nodejs' ? nodejsQuestions :
-                       quizType === 'express' ? expressQuestions :
-                       quizType === 'mongodb' ? mongodbQuestions :
-                       quizType === 'sql' ? sqlQuestions :
-                       quizType === 'typescript' ? typescriptQuestions :
-                       quizType === 'computernetworks' ? computerNetworksQuestions :
-                       quizType === 'ancienthistory' ? ancientHistoryQuestions :
-                       quizType === 'medievalhistory' ? medievalHistoryQuestions :
-                       quizType === 'modernhistory' ? modernHistoryQuestions :
-                       [];
+  const baseQuestions = getQuestionsByType(quizType);
 
   // Validate questions exist
   if (quizType && (!baseQuestions || baseQuestions.length === 0)) {
@@ -340,80 +289,19 @@ function App() {
   };
 
   const handleCategorySelect = (category) => {
-    setSelectedCategory(category);
+    selectCategory(category);
   };
 
   const handleBackToCategories = () => {
-    setSelectedCategory(null);
+    backToCategories();
   };
 
-  // Show notes if selected
-  if (showNotes) {
-    return <SlaveHistoryNotes onBack={() => setShowNotes(false)} />;
-  }
-
-  if (showKhiljiNotes) {
-    return <KhiljiHistoryNotes onBack={() => setShowKhiljiNotes(false)} />;
-  }
-
-  if (showTughlaqNotes) {
-    return <TughlaqHistoryNotes onBack={() => setShowTughlaqNotes(false)} />;
-  }
-
-  if (showSayyidLodisNotes) {
-    return <SayyidLodistoryNotes onBack={() => setShowSayyidLodisNotes(false)} />;
-  }
-
-  if (showAdminNotes) {
-    return <DelhiSultanateAdminNotes onBack={() => setShowAdminNotes(false)} />;
-  }
-
-  if (showSocietyEconomyCultureNotes) {
-    return <DelhiSocietyEconomyCultureNotes onBack={() => setShowSocietyEconomyCultureNotes(false)} />;
-  }
-
-  if (showTripartiteStruggleNotes) {
-    return <TripartiteStruggleNotes onBack={() => setShowTripartiteStruggleNotes(false)} />;
-  }
-
-  if (showTurkishInvasionsNotes) {
-    return <TurkishInvasionsNotes onBack={() => setShowTurkishInvasionsNotes(false)} />;
-  }
-
-  if (showEarlyMedievalSocietyNotes) {
-    return <EarlyMedievalSocietyEconomyCultureNotes onBack={() => setShowEarlyMedievalSocietyNotes(false)} />;
-  }
-
-  if (showMughalFoundersNotes) {
-    return <MughalFoundersNotes onBack={() => setShowMughalFoundersNotes(false)} />;
-  }
-
-  if (showSherShahSuriNotes) {
-    return <SherShahSuriNotes onBack={() => setShowSherShahSuriNotes(false)} />;
-  }
-
-  if (showAkbarNotes) {
-    return <AkbarNotes onBack={() => setShowAkbarNotes(false)} />;
-  }
-
-  if (showJahangirShahJahanNotes) {
-    return <JahangirShahJahanNotes onBack={() => setShowJahangirShahJahanNotes(false)} />;
-  }
-
-  if (showAurangzebNotes) {
-    return <AurangzebNotes onBack={() => setShowAurangzebNotes(false)} />;
-  }
-
-  if (showMughalAdministrationNotes) {
-    return <MughalAdministrationNotes onBack={() => setShowMughalAdministrationNotes(false)} />;
-  }
-
-  if (showMughalSocietyEconomyCultureNotes) {
-    return <MughalSocietyEconomyCultureNotes onBack={() => setShowMughalSocietyEconomyCultureNotes(false)} />;
-  }
-
-  if (showMarathaEmpireNotes) {
-    return <MarathaEmpireNotes onBack={() => setShowMarathaEmpireNotes(false)} />;
+  // Show notes if a notes type is selected
+  if (openNotes) {
+    const NotesComponent = getNotesComponent(openNotes);
+    if (NotesComponent) {
+      return <NotesComponent onBack={closeNotes} />;
+    }
   }
 
   if (quizType === null && selectedCategory === null) {
@@ -485,7 +373,7 @@ function App() {
               <div className="p-6 bg-gray-800 border border-gray-700 rounded-lg text-center">
                 <h3 className="text-xl font-semibold text-white mb-3">⚔️ Tripartite Struggle & Regional Kingdoms - Study Materials</h3>
                 <button
-                  onClick={() => setShowTripartiteStruggleNotes(true)}
+                  onClick={() => openNotesByType('tripartite-struggle')}
                   className="inline-block bg-amber-600 hover:bg-amber-700 text-white px-6 py-3 rounded-lg font-semibold transition-all"
                 >
                   ⚔️ Tripartite Struggle & Regional Kingdoms Notes
@@ -496,7 +384,7 @@ function App() {
               <div className="p-6 bg-gray-800 border border-gray-700 rounded-lg text-center">
                 <h3 className="text-xl font-semibold text-white mb-3">🏹 Turkish Invasions - Study Materials</h3>
                 <button
-                  onClick={() => setShowTurkishInvasionsNotes(true)}
+                  onClick={() => openNotesByType('turkish-invasions')}
                   className="inline-block bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-semibold transition-all"
                 >
                   🏹 Turkish Invasions & Islamic Arrival Notes
@@ -507,7 +395,7 @@ function App() {
               <div className="p-6 bg-gray-800 border border-gray-700 rounded-lg text-center">
                 <h3 className="text-xl font-semibold text-white mb-3">🌸 Society, Economy & Culture - Study Materials</h3>
                 <button
-                  onClick={() => setShowEarlyMedievalSocietyNotes(true)}
+                  onClick={() => openNotesByType('early-medieval-society')}
                   className="inline-block bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition-all"
                 >
                   🌸 Feudalism, Bhakti & Regional Languages Notes
@@ -523,7 +411,7 @@ function App() {
               <div className="p-6 bg-gray-800 border border-gray-700 rounded-lg text-center">
                 <h3 className="text-xl font-semibold text-white mb-3">📚 Slave Dynasty - Study Materials</h3>
                 <button
-                  onClick={() => setShowNotes(true)}
+                  onClick={() => openNotesByType('slave-dynasty')}
                   className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-all"
                 >
                   📖 Slave Dynasty Revision Notes
@@ -533,7 +421,7 @@ function App() {
               <div className="p-6 bg-gray-800 border border-gray-700 rounded-lg text-center">
                 <h3 className="text-xl font-semibold text-white mb-3">⚔️ Alauddin Khilji - Study Materials</h3>
                 <button
-                  onClick={() => setShowKhiljiNotes(true)}
+                  onClick={() => openNotesByType('khilji-dynasty')}
                   className="inline-block bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-lg font-semibold transition-all"
                 >
                   ⚔️ Alauddin Khilji Revision Notes
@@ -543,7 +431,7 @@ function App() {
               <div className="p-6 bg-gray-800 border border-gray-700 rounded-lg text-center">
                 <h3 className="text-xl font-semibold text-white mb-3">👑 Tughlaq Dynasty - Study Materials</h3>
                 <button
-                  onClick={() => setShowTughlaqNotes(true)}
+                  onClick={() => openNotesByType('tughlaq-dynasty')}
                   className="inline-block bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition-all"
                 >
                   👑 Tughlaq Dynasty Revision Notes
@@ -553,7 +441,7 @@ function App() {
               <div className="p-6 bg-gray-800 border border-gray-700 rounded-lg text-center">
                 <h3 className="text-xl font-semibold text-white mb-3">🏰 Sayyid & Lodi Dynasties - Study Materials</h3>
                 <button
-                  onClick={() => setShowSayyidLodisNotes(true)}
+                  onClick={() => openNotesByType('sayyid-lodi')}
                   className="inline-block bg-amber-600 hover:bg-amber-700 text-white px-6 py-3 rounded-lg font-semibold transition-all"
                 >
                   🏰 Sayyid & Lodi Dynasties Notes
@@ -563,7 +451,7 @@ function App() {
               <div className="p-6 bg-gray-800 border border-gray-700 rounded-lg text-center">
                 <h3 className="text-xl font-semibold text-white mb-3">⚙️ Delhi Sultanate Administration - Study Materials</h3>
                 <button
-                  onClick={() => setShowAdminNotes(true)}
+                  onClick={() => openNotesByType('delhi-admin')}
                   className="inline-block bg-cyan-600 hover:bg-cyan-700 text-white px-6 py-3 rounded-lg font-semibold transition-all"
                 >
                   ⚙️ Administration & System Notes
@@ -573,7 +461,7 @@ function App() {
               <div className="p-6 bg-gray-800 border border-gray-700 rounded-lg text-center">
                 <h3 className="text-xl font-semibold text-white mb-3">🎨 Society, Economy & Culture - Study Materials</h3>
                 <button
-                  onClick={() => setShowSocietyEconomyCultureNotes(true)}
+                  onClick={() => openNotesByType('delhi-society')}
                   className="inline-block bg-rose-600 hover:bg-rose-700 text-white px-6 py-3 rounded-lg font-semibold transition-all"
                 >
                   🎨 Society, Economy & Culture Notes
@@ -587,7 +475,7 @@ function App() {
               </div>
 
               <button
-                onClick={() => setShowMughalFoundersNotes(true)}
+                onClick={() => openNotesByType('mughal-founders')}
                 className="w-full p-4 bg-linear-to-r from-red-900 to-pink-900 border border-red-600 rounded-lg text-left hover:from-red-800 hover:to-pink-800 transition-all group"
               >
                 <h3 className="text-lg font-bold text-white group-hover:text-red-200 transition-colors">👑 The Founders: Babur & Humayun</h3>
@@ -595,7 +483,7 @@ function App() {
               </button>
 
               <button
-                onClick={() => setShowSherShahSuriNotes(true)}
+                onClick={() => openNotesByType('sher-shah-suri')}
                 className="w-full p-4 bg-linear-to-r from-yellow-900 to-orange-900 border border-yellow-600 rounded-lg text-left hover:from-yellow-800 hover:to-orange-800 transition-all group"
               >
                 <h3 className="text-lg font-bold text-white group-hover:text-yellow-200 transition-colors">⚙️ Sher Shah Suri - The Great Administrator</h3>
@@ -603,7 +491,7 @@ function App() {
               </button>
 
               <button
-                onClick={() => setShowAkbarNotes(true)}
+                onClick={() => openNotesByType('akbar')}
                 className="w-full p-4 bg-linear-to-r from-amber-900 to-red-900 border border-amber-600 rounded-lg text-left hover:from-amber-800 hover:to-red-800 transition-all group"
               >
                 <h3 className="text-lg font-bold text-white group-hover:text-amber-200 transition-colors">👑 Akbar - The Empire Builder</h3>
@@ -611,7 +499,7 @@ function App() {
               </button>
 
               <button
-                onClick={() => setShowJahangirShahJahanNotes(true)}
+                onClick={() => openNotesByType('jahangir-shah-jahan')}
                 className="w-full p-4 bg-linear-to-r from-indigo-900 to-purple-900 border border-indigo-600 rounded-lg text-left hover:from-indigo-800 hover:to-purple-800 transition-all group"
               >
                 <h3 className="text-lg font-bold text-white group-hover:text-indigo-200 transition-colors">👑 Jahangir & Shah Jahan - Consolidation to Magnificence</h3>
@@ -619,7 +507,7 @@ function App() {
               </button>
 
               <button
-                onClick={() => setShowAurangzebNotes(true)}
+                onClick={() => openNotesByType('aurangzeb')}
                 className="w-full p-4 bg-linear-to-r from-red-900 to-orange-900 border border-red-600 rounded-lg text-left hover:from-red-800 hover:to-orange-800 transition-all group"
               >
                 <h3 className="text-lg font-bold text-white group-hover:text-red-200 transition-colors">👑 Aurangzeb - The Last Great Mughal & Decline</h3>
@@ -627,7 +515,7 @@ function App() {
               </button>
 
               <button
-                onClick={() => setShowMughalAdministrationNotes(true)}
+                onClick={() => openNotesByType('mughal-admin')}
                 className="w-full p-4 bg-linear-to-r from-blue-900 to-cyan-900 border border-blue-600 rounded-lg text-left hover:from-blue-800 hover:to-cyan-800 transition-all group"
               >
                 <h3 className="text-lg font-bold text-white group-hover:text-blue-200 transition-colors">⚙️ Mughal Administration - The Bureaucratic Engine</h3>
@@ -635,7 +523,7 @@ function App() {
               </button>
 
               <button
-                onClick={() => setShowMughalSocietyEconomyCultureNotes(true)}
+                onClick={() => openNotesByType('mughal-society')}
                 className="w-full p-4 bg-linear-to-r from-purple-900 to-orange-900 border border-purple-600 rounded-lg text-left hover:from-purple-800 hover:to-orange-800 transition-all group"
               >
                 <h3 className="text-lg font-bold text-white group-hover:text-purple-200 transition-colors">🎨 Mughal Society, Economy & Culture</h3>
@@ -648,7 +536,7 @@ function App() {
               </div>
 
               <button
-                onClick={() => setShowMarathaEmpireNotes(true)}
+                onClick={() => openNotesByType('maratha-empire')}
                 className="w-full p-4 bg-linear-to-r from-orange-900 to-red-900 border border-orange-600 rounded-lg text-left hover:from-orange-800 hover:to-red-800 transition-all group"
               >
                 <h3 className="text-lg font-bold text-white group-hover:text-orange-200 transition-colors">⚔️ Maratha Empire - Complete Study Guide</h3>
