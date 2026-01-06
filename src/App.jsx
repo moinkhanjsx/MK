@@ -21,12 +21,26 @@ import QuizQuestion from './components/QuizQuestion';
 import QuizExplanation from './components/QuizExplanation';
 import QuizResults from './components/QuizResults';
 import QuizReview from './components/QuizReview';
+import CategorySelection from './components/CategorySelection';
+import QuizConfiguration from './components/QuizConfiguration';
+import QuizList from './components/QuizList';
 import SlaveHistoryNotes from './components/SlaveHistoryNotes';
 import KhiljiHistoryNotes from './components/KhiljiHistoryNotes';
 import TughlaqHistoryNotes from './components/TughlaqHistoryNotes';
 import SayyidLodistoryNotes from './components/SayyidLodistoryNotes';
 import DelhiSultanateAdminNotes from './components/DelhiSultanateAdminNotes';
 import DelhiSocietyEconomyCultureNotes from './components/DelhiSocietyEconomyCultureNotes';
+import TripartiteStruggleNotes from './components/TripartiteStruggleNotes';
+import TurkishInvasionsNotes from './components/TurkishInvasionsNotes';
+import EarlyMedievalSocietyEconomyCultureNotes from './components/EarlyMedievalSocietyEconomyCultureNotes';
+import MughalFoundersNotes from './components/MughalFoundersNotes';
+import SherShahSuriNotes from './components/SherShahSuriNotes';
+import AkbarNotes from './components/AkbarNotes';
+import JahangirShahJahanNotes from './components/JahangirShahJahanNotes';
+import AurangzebNotes from './components/AurangzebNotes';
+import MughalAdministrationNotes from './components/MughalAdministrationNotes';
+import MughalSocietyEconomyCultureNotes from './components/MughalSocietyEconomyCultureNotes';
+import MarathaEmpireNotes from './components/MarathaEmpireNotes';
 
 function App() {
   const [quizType, setQuizType] = useState(null);
@@ -48,6 +62,17 @@ function App() {
   const [showSayyidLodisNotes, setShowSayyidLodisNotes] = useState(false);
   const [showAdminNotes, setShowAdminNotes] = useState(false);
   const [showSocietyEconomyCultureNotes, setShowSocietyEconomyCultureNotes] = useState(false);
+  const [showTripartiteStruggleNotes, setShowTripartiteStruggleNotes] = useState(false);
+  const [showTurkishInvasionsNotes, setShowTurkishInvasionsNotes] = useState(false);
+  const [showEarlyMedievalSocietyNotes, setShowEarlyMedievalSocietyNotes] = useState(false);
+  const [showMughalFoundersNotes, setShowMughalFoundersNotes] = useState(false);
+  const [showSherShahSuriNotes, setShowSherShahSuriNotes] = useState(false);
+  const [showAkbarNotes, setShowAkbarNotes] = useState(false);
+  const [showJahangirShahJahanNotes, setShowJahangirShahJahanNotes] = useState(false);
+  const [showAurangzebNotes, setShowAurangzebNotes] = useState(false);
+  const [showMughalAdministrationNotes, setShowMughalAdministrationNotes] = useState(false);
+  const [showMughalSocietyEconomyCultureNotes, setShowMughalSocietyEconomyCultureNotes] = useState(false);
+  const [showMarathaEmpireNotes, setShowMarathaEmpireNotes] = useState(false);
 
   // Shuffle array utility
   const shuffleArray = (array) => {
@@ -347,6 +372,50 @@ function App() {
     return <DelhiSocietyEconomyCultureNotes onBack={() => setShowSocietyEconomyCultureNotes(false)} />;
   }
 
+  if (showTripartiteStruggleNotes) {
+    return <TripartiteStruggleNotes onBack={() => setShowTripartiteStruggleNotes(false)} />;
+  }
+
+  if (showTurkishInvasionsNotes) {
+    return <TurkishInvasionsNotes onBack={() => setShowTurkishInvasionsNotes(false)} />;
+  }
+
+  if (showEarlyMedievalSocietyNotes) {
+    return <EarlyMedievalSocietyEconomyCultureNotes onBack={() => setShowEarlyMedievalSocietyNotes(false)} />;
+  }
+
+  if (showMughalFoundersNotes) {
+    return <MughalFoundersNotes onBack={() => setShowMughalFoundersNotes(false)} />;
+  }
+
+  if (showSherShahSuriNotes) {
+    return <SherShahSuriNotes onBack={() => setShowSherShahSuriNotes(false)} />;
+  }
+
+  if (showAkbarNotes) {
+    return <AkbarNotes onBack={() => setShowAkbarNotes(false)} />;
+  }
+
+  if (showJahangirShahJahanNotes) {
+    return <JahangirShahJahanNotes onBack={() => setShowJahangirShahJahanNotes(false)} />;
+  }
+
+  if (showAurangzebNotes) {
+    return <AurangzebNotes onBack={() => setShowAurangzebNotes(false)} />;
+  }
+
+  if (showMughalAdministrationNotes) {
+    return <MughalAdministrationNotes onBack={() => setShowMughalAdministrationNotes(false)} />;
+  }
+
+  if (showMughalSocietyEconomyCultureNotes) {
+    return <MughalSocietyEconomyCultureNotes onBack={() => setShowMughalSocietyEconomyCultureNotes(false)} />;
+  }
+
+  if (showMarathaEmpireNotes) {
+    return <MarathaEmpireNotes onBack={() => setShowMarathaEmpireNotes(false)} />;
+  }
+
   if (quizType === null && selectedCategory === null) {
     return (
       <div className="min-h-screen bg-linear-to-br from-gray-900 to-black py-8 px-4">
@@ -413,6 +482,39 @@ function App() {
                 <p className="text-amber-300 font-semibold">FOUNDATIONAL SECTION</p>
               </div>
 
+              <div className="p-6 bg-gray-800 border border-gray-700 rounded-lg text-center">
+                <h3 className="text-xl font-semibold text-white mb-3">⚔️ Tripartite Struggle & Regional Kingdoms - Study Materials</h3>
+                <button
+                  onClick={() => setShowTripartiteStruggleNotes(true)}
+                  className="inline-block bg-amber-600 hover:bg-amber-700 text-white px-6 py-3 rounded-lg font-semibold transition-all"
+                >
+                  ⚔️ Tripartite Struggle & Regional Kingdoms Notes
+                </button>
+                <p className="text-gray-400 text-sm mt-3">Understand Kannauj conflict, three dynasties (Palas, Pratiharas, Rashtrakutas), Chola excellence, and regional kingdoms</p>
+              </div>
+
+              <div className="p-6 bg-gray-800 border border-gray-700 rounded-lg text-center">
+                <h3 className="text-xl font-semibold text-white mb-3">🏹 Turkish Invasions - Study Materials</h3>
+                <button
+                  onClick={() => setShowTurkishInvasionsNotes(true)}
+                  className="inline-block bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-semibold transition-all"
+                >
+                  🏹 Turkish Invasions & Islamic Arrival Notes
+                </button>
+                <p className="text-gray-400 text-sm mt-3">Learn about Mahmud of Ghazni's raids and Muhammad Ghori's conquest - the turning point from plunder to permanent rule</p>
+              </div>
+
+              <div className="p-6 bg-gray-800 border border-gray-700 rounded-lg text-center">
+                <h3 className="text-xl font-semibold text-white mb-3">🌸 Society, Economy & Culture - Study Materials</h3>
+                <button
+                  onClick={() => setShowEarlyMedievalSocietyNotes(true)}
+                  className="inline-block bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition-all"
+                >
+                  🌸 Feudalism, Bhakti & Regional Languages Notes
+                </button>
+                <p className="text-gray-400 text-sm mt-3">Explore feudal decentralization, Bhakti devotion movement, Shankaracharya's philosophy, and rise of regional languages</p>
+              </div>
+
               <div className="p-6 bg-linear-to-r from-purple-900 to-indigo-900 border border-purple-700 rounded-lg text-center">
                 <h2 className="text-3xl font-bold text-purple-200 mb-2">Part II: The Delhi Sultanate (1206 - 1526 AD)</h2>
                 <p className="text-purple-300 font-semibold">CORE SECTION</p>
@@ -477,6 +579,85 @@ function App() {
                   🎨 Society, Economy & Culture Notes
                 </button>
                 <p className="text-gray-400 text-sm mt-3">Explore the social hierarchy, agrarian economy, Indo-Islamic architecture, and religious synthesis</p>
+              </div>
+
+              <div className="p-6 bg-linear-to-r from-red-900 to-pink-900 border border-red-700 rounded-lg text-center">
+                <h2 className="text-3xl font-bold text-red-200 mb-2">Part III: The Mughal Empire (1526 - 1857)</h2>
+                <p className="text-red-300 font-semibold">MOST IMPORTANT SECTION</p>
+              </div>
+
+              <button
+                onClick={() => setShowMughalFoundersNotes(true)}
+                className="w-full p-4 bg-linear-to-r from-red-900 to-pink-900 border border-red-600 rounded-lg text-left hover:from-red-800 hover:to-pink-800 transition-all group"
+              >
+                <h3 className="text-lg font-bold text-white group-hover:text-red-200 transition-colors">👑 The Founders: Babur & Humayun</h3>
+                <p className="text-gray-300 text-sm mt-2">The Foundation and Fragile Consolidation (1526-1556) - Battle of Panipat, Khanwa, Sher Shah Suri, Persian Exile</p>
+              </button>
+
+              <button
+                onClick={() => setShowSherShahSuriNotes(true)}
+                className="w-full p-4 bg-linear-to-r from-yellow-900 to-orange-900 border border-yellow-600 rounded-lg text-left hover:from-yellow-800 hover:to-orange-800 transition-all group"
+              >
+                <h3 className="text-lg font-bold text-white group-hover:text-yellow-200 transition-colors">⚙️ Sher Shah Suri - The Great Administrator</h3>
+                <p className="text-gray-300 text-sm mt-2">The Sur Interregnum (1540-1545) - Patta System, Administrative Reorganization, Grand Trunk Road, Currency Reform</p>
+              </button>
+
+              <button
+                onClick={() => setShowAkbarNotes(true)}
+                className="w-full p-4 bg-linear-to-r from-amber-900 to-red-900 border border-amber-600 rounded-lg text-left hover:from-amber-800 hover:to-red-800 transition-all group"
+              >
+                <h3 className="text-lg font-bold text-white group-hover:text-amber-200 transition-colors">👑 Akbar - The Empire Builder</h3>
+                <p className="text-gray-300 text-sm mt-2">The Greatest Mughal (1556-1605) - Mansabdari System, Sulh-i-Kul Philosophy, Fatehpur Sikri, Navratnas</p>
+              </button>
+
+              <button
+                onClick={() => setShowJahangirShahJahanNotes(true)}
+                className="w-full p-4 bg-linear-to-r from-indigo-900 to-purple-900 border border-indigo-600 rounded-lg text-left hover:from-indigo-800 hover:to-purple-800 transition-all group"
+              >
+                <h3 className="text-lg font-bold text-white group-hover:text-indigo-200 transition-colors">👑 Jahangir & Shah Jahan - Consolidation to Magnificence</h3>
+                <p className="text-gray-300 text-sm mt-2">From Justice & Art to Monuments (1605-1658) - Chain of Justice, Nur Jahan, Taj Mahal, Red Fort, War of Succession</p>
+              </button>
+
+              <button
+                onClick={() => setShowAurangzebNotes(true)}
+                className="w-full p-4 bg-linear-to-r from-red-900 to-orange-900 border border-red-600 rounded-lg text-left hover:from-red-800 hover:to-orange-800 transition-all group"
+              >
+                <h3 className="text-lg font-bold text-white group-hover:text-red-200 transition-colors">👑 Aurangzeb - The Last Great Mughal & Decline</h3>
+                <p className="text-gray-300 text-sm mt-2">Religious Orthodoxy & Imperial Overstretch (1658-1707) - Deccan Campaigns, Mansabdari Collapse, Rise of Regional Powers</p>
+              </button>
+
+              <button
+                onClick={() => setShowMughalAdministrationNotes(true)}
+                className="w-full p-4 bg-linear-to-r from-blue-900 to-cyan-900 border border-blue-600 rounded-lg text-left hover:from-blue-800 hover:to-cyan-800 transition-all group"
+              >
+                <h3 className="text-lg font-bold text-white group-hover:text-blue-200 transition-colors">⚙️ Mughal Administration - The Bureaucratic Engine</h3>
+                <p className="text-gray-300 text-sm mt-2">Central, Provincial & Revenue Systems - Mansabdari, Jagirdari, Checks & Balances (Detailed for Mains)</p>
+              </button>
+
+              <button
+                onClick={() => setShowMughalSocietyEconomyCultureNotes(true)}
+                className="w-full p-4 bg-linear-to-r from-purple-900 to-orange-900 border border-purple-600 rounded-lg text-left hover:from-purple-800 hover:to-orange-800 transition-all group"
+              >
+                <h3 className="text-lg font-bold text-white group-hover:text-purple-200 transition-colors">🎨 Mughal Society, Economy & Culture</h3>
+                <p className="text-gray-300 text-sm mt-2">Religious Movements (Bhakti, Sikhism), Architecture & Art, Regional Literature, Jajmani Economy, European Trade</p>
+              </button>
+
+              <div className="p-6 bg-linear-to-r from-orange-900 to-red-900 border border-orange-700 rounded-lg text-center">
+                <h2 className="text-3xl font-bold text-orange-200 mb-2">Part IV: The Maratha Empire (1640s - 1818)</h2>
+                <p className="text-orange-300 font-semibold">ABSOLUTELY VITAL FOR MPSC</p>
+              </div>
+
+              <button
+                onClick={() => setShowMarathaEmpireNotes(true)}
+                className="w-full p-4 bg-linear-to-r from-orange-900 to-red-900 border border-orange-600 rounded-lg text-left hover:from-orange-800 hover:to-red-800 transition-all group"
+              >
+                <h3 className="text-lg font-bold text-white group-hover:text-orange-200 transition-colors">⚔️ Maratha Empire - Complete Study Guide</h3>
+                <p className="text-gray-300 text-sm mt-2">PARTS I-VI: Shivaji Maharaj | Peshwa Era | Confederacy System | Relations with Other Powers | Comparative Studies | Impact on Society (1627-1818)</p>
+              </button>
+
+              <div className="p-6 bg-linear-to-r from-pink-900 to-rose-900 border border-pink-700 rounded-lg text-center">
+                <h2 className="text-3xl font-bold text-pink-200 mb-2">Part VII: Thematic Analysis & Synthesis (Cross-Period)</h2>
+                <p className="text-pink-300 font-semibold">CRITICAL CONNECTIONS FOR MAINS WRITING</p>
               </div>
             </div>
           )}

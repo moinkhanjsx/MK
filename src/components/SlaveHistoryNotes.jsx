@@ -128,19 +128,19 @@ const SlaveHistoryNotes = ({ onBack }) => {
             </button>
             {expandedSection === 'feynman' && (
               <div className="px-6 pb-6 border-t border-gray-700 space-y-4 text-gray-300">
-                <div className="bg-gradient-to-r from-amber-900 to-orange-900 p-4 rounded">
+                <div className="bg-linear-to-r from-amber-900 to-orange-900 p-4 rounded">
                   <p className="font-semibold text-amber-200 mb-2">🏆 The Basic Story</p>
                   <p>A powerful coach (Muhammad Ghori) wins a tournament in India, leaves his best bought player (Aibak) in charge to start a team in Delhi.</p>
                 </div>
-                <div className="bg-gradient-to-r from-orange-900 to-red-900 p-4 rounded">
+                <div className="bg-linear-to-r from-orange-900 to-red-900 p-4 rounded">
                   <p className="font-semibold text-orange-200 mb-2">👥 The Real Team Builder (Iltutmish)</p>
                   <p>Makes team rules strong: designs official uniforms (silver coin), keeps bullies away (Mongols), creates Iqta system.</p>
                 </div>
-                <div className="bg-gradient-to-r from-red-900 to-pink-900 p-4 rounded">
+                <div className="bg-linear-to-r from-red-900 to-pink-900 p-4 rounded">
                   <p className="font-semibold text-red-200 mb-2">⚡ The Crisis (Razia)</p>
                   <p>Capable daughter leads briefly, but senior players don't accept female leader, kick her out.</p>
                 </div>
-                <div className="bg-gradient-to-r from-pink-900 to-purple-900 p-4 rounded">
+                <div className="bg-linear-to-r from-pink-900 to-purple-900 p-4 rounded">
                   <p className="font-semibold text-pink-200 mb-2">🛡️ The Strict Manager (Balban)</p>
                   <p>Takes charge: must be feared, fires troublemakers, builds strong fence against bullies, cares about discipline.</p>
                 </div>
@@ -250,7 +250,7 @@ const SlaveHistoryNotes = ({ onBack }) => {
         </div>
 
         {/* Bottom Tip */}
-        <div className="mt-8 p-6 bg-gradient-to-r from-blue-900 to-purple-900 rounded-lg border border-blue-700">
+        <div className="mt-8 p-6 bg-linear-to-r from-blue-900 to-purple-900 rounded-lg border border-blue-700">
           <p className="text-blue-200">
             <span className="font-bold">💡 Study Tip:</span> If you can explain each ruler in one simple sentence (like to a 12-year-old), you've understood it well!
           </p>
