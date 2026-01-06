@@ -1,0 +1,34 @@
+import React from 'react';
+
+const SelfTestSection = ({ expandedSection, toggleSection }) => (
+  <div className="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden">
+    <button
+      onClick={() => toggleSection('selftest')}
+      className="w-full p-6 flex items-center justify-between hover:bg-gray-750 transition-colors"
+    >
+      <h2 className="text-xl font-bold text-white">🧪 Self-Test Questions</h2>
+      <span className="text-2xl">{expandedSection === 'selftest' ? '−' : '+'}</span>
+    </button>
+    {expandedSection === 'selftest' && (
+      <div className="px-6 pb-6 border-t border-gray-700 space-y-4 text-gray-300">
+        <div className="bg-gray-900 p-4 rounded">
+          <p className="font-bold text-blue-300 mb-2">Q1: Bhakti & Regional Literature Connection</p>
+          <p className="mb-2">How did Bhakti Movement directly contribute to development of regional literature (Hindi, Marathi) during Mughal period? Name one saint & language they used.</p>
+          <p className="text-gray-400 text-sm">💡 Answer: BHAKTI SAINTS deliberately chose REGIONAL LANGUAGES instead of Sanskrit/Persian to spread devotional message to masses. This created massive corpus of literature in local languages, establishing them as vehicles of high literature. SPECIFIC EXAMPLE #1: TULSIDAS wrote RAMCHARITMANAS in AWADHI language. It was vernacular retelling of Ramayana with devotional tone. Became foundational text for Hindi literature & North Indian culture. SPECIFIC EXAMPLE #2: SURDAS wrote SURSAGAR in BRAJ BHASHA. Over 5000 poems of devotion to Krishna. So beautiful & influential that Braj Bhasha became recognized as major literary language. SPECIFIC EXAMPLE #3: MIRABAI wrote in LOCAL RAJASTHANI languages. Devotional poems spread across North, influenced regional literature development. MECHANISM: Saints made deliberate choice to use vernacular because: 1) reach common people (who didn't know Sanskrit/Persian), 2) emotional expression flowed better in native language, 3) spiritual message was democratic (available to all, not just educated elite). RESULT: These texts didn't just spread religion—they ELEVATED regional languages from dialects to prestigious literary mediums. Established that important ideas (religion, philosophy, poetry) could be expressed in local languages. This legitimized regional languages & became foundation for modern Hindi, Marathi, Bengali literature.</p>
+        </div>
+        <div className="bg-gray-900 p-4 rounded">
+          <p className="font-bold text-blue-300 mb-2">Q2: Jajmani vs. Bhakti Ideology Contradiction</p>
+          <p className="mb-2">Jajmani system & Bhakti saints presented contradictory views of caste. Explain the contradiction.</p>
+          <p className="text-gray-400 text-sm">💡 Answer: JAJMANI SYSTEM = REINFORCED CASTE HIERARCHY. Village economy organized by hereditary castes. Different castes had different jobs (determined by birth). Blacksmith = son was blacksmith. Barber = son was barber. Untouchable = forced to do waste removal. Exchange was in grain (not money)—upper castes received better grain shares, lower castes worse shares. System LOCKED people into permanent caste roles. Reinforced idea that caste was natural, ordained, unchangeable. BHAKTI IDEOLOGY = CHALLENGED CASTE HIERARCHY. Saints taught "God sees all souls equally." Caste doesn't matter for salvation. "God doesn't care if you're untouchable, women, low caste—God accepts your devotion." Essentially saying: spiritual equality should exist, caste-based discrimination is wrong. CONTRADICTION: Economic system said "stay in your caste role," spiritual ideology said "caste doesn't matter." Village system was practical (kept economy running, everyone knew role) but unjust (locked people in). Bhakti was ideologically liberating (offered spiritual escape) but didn't change practical economic realities. SIGNIFICANCE: This contradiction was DYNAMIC & POWERFUL. It made Bhakti SO APPEALING to lower castes—offered validation that their caste status didn't define their spiritual worth. The very injustice of Jajmani system created audience HUNGRY for Bhakti's message of equality. BUT also shows why Bhakti remained primarily spiritual—didn't fundamentally transform village economy (Jajmani continued for centuries).</p>
+        </div>
+        <div className="bg-gray-900 p-4 rounded">
+          <p className="font-bold text-blue-300 mb-2">Q3: European Trading Companies' Two Fundamental Changes</p>
+          <p className="mb-2">Arrival of European companies (EIC, French, Dutch) in Mughal era introduced two fundamental changes to India's economic & political landscape. What were they?</p>
+          <p className="text-gray-400 text-sm">💡 Answer: CHANGE #1 (ECONOMIC): SHIFT OF TRADE CONTROL from Indian merchants to European companies. PRE-EUROPEAN = Indian merchants (Hindu, Muslim traders) controlled Indian Ocean trade. Goods flowed through Indian ports, wealth accumulated in Indian hands. EUROPEAN ARRIVAL = European companies (especially English EIC) systematically monopolized trade. Used naval power (cannon, ships) to dominate coasts. Established "factories" (fortified posts) at strategic locations. Excluded Indian merchants from profitable trade. Wealth flow REVERSED—instead of Indian merchants exporting goods & keeping profits, Europeans controlled export & extracted profits to Europe. By 18th-19th centuries, India became exporter of raw materials (cotton, indigo, spices) under European control & importer of European manufactured goods. This transfer of economic control was SUBTLE at first (just trading posts) but REVOLUTIONARY in long term. CHANGE #2 (POLITICAL): FROM MERCANTILE PRESENCE TO TERRITORIAL RULE. INITIAL = European companies were traders, not rulers. Operated on Mughal emperor's sufferance. Paid taxes, negotiated with governors. BUT trading posts became MILITARY BASES. Companies built walls, cannons, armies. As Mughal authority weakened (18th century), companies weren't content with trade—started conquering territory. EIC captured Bengal (Battle of Plassey 1757), Mysore, eventually entire subcontinent. MECHANISM: Trading presence → military fortification → political leverage → territorial conquest. LONG TERM: Trade was gateway to political domination. Europeans didn't invade India with armies initially—they arrived as merchants, established trade posts, built military strength, then conquered politically. CONSEQUENCE: India went from being ruled by Indian empires to being ruled by European colonial power. Not conquest by military invasion but by gradual transformation of trading relationship into colonial relationship. TWO CHANGES INTERCONNECTED: Economic control (monopoly on trade) enabled political control (funded military armies). Both happened simultaneously, both sowed seeds for colonialism.</p>
+        </div>
+      </div>
+    )}
+  </div>
+);
+
+export default SelfTestSection;
