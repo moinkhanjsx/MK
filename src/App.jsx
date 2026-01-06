@@ -13,11 +13,20 @@ import { mongodbQuestions } from './data/mongodbQuestions';
 import { sqlQuestions } from './data/sqlQuestions';
 import { typescriptQuestions } from './data/typescriptQuestions';
 import { computerNetworksQuestions } from './data/computerNetworksQuestions';
+import { ancientHistoryQuestions } from './data/ancientHistoryQuestions';
+import { medievalHistoryQuestions } from './data/medievalHistoryQuestions';
+import { modernHistoryQuestions } from './data/modernHistoryQuestions';
 import QuizHeader from './components/QuizHeader';
 import QuizQuestion from './components/QuizQuestion';
 import QuizExplanation from './components/QuizExplanation';
 import QuizResults from './components/QuizResults';
 import QuizReview from './components/QuizReview';
+import SlaveHistoryNotes from './components/SlaveHistoryNotes';
+import KhiljiHistoryNotes from './components/KhiljiHistoryNotes';
+import TughlaqHistoryNotes from './components/TughlaqHistoryNotes';
+import SayyidLodistoryNotes from './components/SayyidLodistoryNotes';
+import DelhiSultanateAdminNotes from './components/DelhiSultanateAdminNotes';
+import DelhiSocietyEconomyCultureNotes from './components/DelhiSocietyEconomyCultureNotes';
 
 function App() {
   const [quizType, setQuizType] = useState(null);
@@ -33,6 +42,12 @@ function App() {
   const [showReview, setShowReview] = useState(false);
   const [answers, setAnswers] = useState([]);
   const [shuffledQuestions, setShuffledQuestions] = useState([]);
+  const [showNotes, setShowNotes] = useState(false);
+  const [showKhiljiNotes, setShowKhiljiNotes] = useState(false);
+  const [showTughlaqNotes, setShowTughlaqNotes] = useState(false);
+  const [showSayyidLodisNotes, setShowSayyidLodisNotes] = useState(false);
+  const [showAdminNotes, setShowAdminNotes] = useState(false);
+  const [showSocietyEconomyCultureNotes, setShowSocietyEconomyCultureNotes] = useState(false);
 
   // Shuffle array utility
   const shuffleArray = (array) => {
@@ -64,6 +79,9 @@ function App() {
                        quizType === 'sql' ? sqlQuestions :
                        quizType === 'typescript' ? typescriptQuestions :
                        quizType === 'computernetworks' ? computerNetworksQuestions :
+                       quizType === 'ancienthistory' ? ancientHistoryQuestions :
+                       quizType === 'medievalhistory' ? medievalHistoryQuestions :
+                       quizType === 'modernhistory' ? modernHistoryQuestions :
                        [];
 
   // Validate questions exist
@@ -282,6 +300,17 @@ function App() {
         { id: 'sql', name: 'SQL', icon: faDatabase, color: 'from-orange-500 to-red-600', hoverColor: 'from-orange-600 hover:to-red-700' },
         { id: 'computernetworks', name: 'Computer Networks', icon: faServer, color: 'from-cyan-500 to-blue-600', hoverColor: 'from-cyan-600 hover:to-blue-700' }
       ]
+    },
+    'history': {
+      title: 'History',
+      icon: faCode,
+      color: 'from-amber-600 to-orange-600',
+      hoverColor: 'from-amber-700 hover:to-orange-700',
+      quizzes: [
+        { id: 'ancienthistory', name: 'Ancient History', icon: null, color: 'from-amber-700 to-yellow-600', hoverColor: 'from-amber-800 hover:to-yellow-700' },
+        { id: 'medievalhistory', name: 'Medieval History', icon: null, color: 'from-orange-600 to-red-600', hoverColor: 'from-orange-700 hover:to-red-700' },
+        { id: 'modernhistory', name: 'Modern History', icon: null, color: 'from-red-600 to-pink-600', hoverColor: 'from-red-700 hover:to-pink-700' }
+      ]
     }
   };
 
@@ -292,6 +321,31 @@ function App() {
   const handleBackToCategories = () => {
     setSelectedCategory(null);
   };
+
+  // Show notes if selected
+  if (showNotes) {
+    return <SlaveHistoryNotes onBack={() => setShowNotes(false)} />;
+  }
+
+  if (showKhiljiNotes) {
+    return <KhiljiHistoryNotes onBack={() => setShowKhiljiNotes(false)} />;
+  }
+
+  if (showTughlaqNotes) {
+    return <TughlaqHistoryNotes onBack={() => setShowTughlaqNotes(false)} />;
+  }
+
+  if (showSayyidLodisNotes) {
+    return <SayyidLodistoryNotes onBack={() => setShowSayyidLodisNotes(false)} />;
+  }
+
+  if (showAdminNotes) {
+    return <DelhiSultanateAdminNotes onBack={() => setShowAdminNotes(false)} />;
+  }
+
+  if (showSocietyEconomyCultureNotes) {
+    return <DelhiSocietyEconomyCultureNotes onBack={() => setShowSocietyEconomyCultureNotes(false)} />;
+  }
 
   if (quizType === null && selectedCategory === null) {
     return (
@@ -338,7 +392,7 @@ function App() {
             <p className="text-gray-400">Choose a technology to test your knowledge</p>
           </div>
           
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
             {category.quizzes.map((quiz) => (
               <button
                 key={quiz.id}
@@ -351,6 +405,81 @@ function App() {
               </button>
             ))}
           </div>
+
+          {selectedCategory === 'history' && (
+            <div className="mt-8 space-y-4">
+              <div className="p-6 bg-linear-to-r from-amber-900 to-orange-900 border border-amber-700 rounded-lg text-center">
+                <h2 className="text-3xl font-bold text-amber-200 mb-2">Part I: Early Medieval India (Circa 750 AD - 1200 AD)</h2>
+                <p className="text-amber-300 font-semibold">FOUNDATIONAL SECTION</p>
+              </div>
+
+              <div className="p-6 bg-linear-to-r from-purple-900 to-indigo-900 border border-purple-700 rounded-lg text-center">
+                <h2 className="text-3xl font-bold text-purple-200 mb-2">Part II: The Delhi Sultanate (1206 - 1526 AD)</h2>
+                <p className="text-purple-300 font-semibold">CORE SECTION</p>
+              </div>
+              
+              <div className="p-6 bg-gray-800 border border-gray-700 rounded-lg text-center">
+                <h3 className="text-xl font-semibold text-white mb-3">📚 Slave Dynasty - Study Materials</h3>
+                <button
+                  onClick={() => setShowNotes(true)}
+                  className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-all"
+                >
+                  📖 Slave Dynasty Revision Notes
+                </button>
+                <p className="text-gray-400 text-sm mt-3">View comprehensive study guide with Chunking, First Principles, 5 Whys analysis, and Feynman explanations</p>
+              </div>
+              <div className="p-6 bg-gray-800 border border-gray-700 rounded-lg text-center">
+                <h3 className="text-xl font-semibold text-white mb-3">⚔️ Alauddin Khilji - Study Materials</h3>
+                <button
+                  onClick={() => setShowKhiljiNotes(true)}
+                  className="inline-block bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-lg font-semibold transition-all"
+                >
+                  ⚔️ Alauddin Khilji Revision Notes
+                </button>
+                <p className="text-gray-400 text-sm mt-3">Learn about the Khilji Dynasty's wartime command economy, price controls, and military strategy</p>
+              </div>
+              <div className="p-6 bg-gray-800 border border-gray-700 rounded-lg text-center">
+                <h3 className="text-xl font-semibold text-white mb-3">👑 Tughlaq Dynasty - Study Materials</h3>
+                <button
+                  onClick={() => setShowTughlaqNotes(true)}
+                  className="inline-block bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition-all"
+                >
+                  👑 Tughlaq Dynasty Revision Notes
+                </button>
+                <p className="text-gray-400 text-sm mt-3">Explore the dynasty's arc: Stability → Radical Chaos → Attempted Recovery → Collapse</p>
+              </div>
+              <div className="p-6 bg-gray-800 border border-gray-700 rounded-lg text-center">
+                <h3 className="text-xl font-semibold text-white mb-3">🏰 Sayyid & Lodi Dynasties - Study Materials</h3>
+                <button
+                  onClick={() => setShowSayyidLodisNotes(true)}
+                  className="inline-block bg-amber-600 hover:bg-amber-700 text-white px-6 py-3 rounded-lg font-semibold transition-all"
+                >
+                  🏰 Sayyid & Lodi Dynasties Notes
+                </button>
+                <p className="text-gray-400 text-sm mt-3">The final chapter of Delhi Sultanate: From broken state to partnership to autocratic collapse (1414-1526)</p>
+              </div>
+              <div className="p-6 bg-gray-800 border border-gray-700 rounded-lg text-center">
+                <h3 className="text-xl font-semibold text-white mb-3">⚙️ Delhi Sultanate Administration - Study Materials</h3>
+                <button
+                  onClick={() => setShowAdminNotes(true)}
+                  className="inline-block bg-cyan-600 hover:bg-cyan-700 text-white px-6 py-3 rounded-lg font-semibold transition-all"
+                >
+                  ⚙️ Administration & System Notes
+                </button>
+                <p className="text-gray-400 text-sm mt-3">Understand the three-layer system: Central command, Iqta provinces, and legal/religious administration</p>
+              </div>
+              <div className="p-6 bg-gray-800 border border-gray-700 rounded-lg text-center">
+                <h3 className="text-xl font-semibold text-white mb-3">🎨 Society, Economy & Culture - Study Materials</h3>
+                <button
+                  onClick={() => setShowSocietyEconomyCultureNotes(true)}
+                  className="inline-block bg-rose-600 hover:bg-rose-700 text-white px-6 py-3 rounded-lg font-semibold transition-all"
+                >
+                  🎨 Society, Economy & Culture Notes
+                </button>
+                <p className="text-gray-400 text-sm mt-3">Explore the social hierarchy, agrarian economy, Indo-Islamic architecture, and religious synthesis</p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     );
